@@ -8,6 +8,7 @@ app.get('/', (_request, response) => {
 });
 
 app.use('/products', require('./routers/productsRoute'));
+app.use('/sales', require('./routers/salesRoute'));
 
 app.use(require('./middlewares/error'));
 
