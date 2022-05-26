@@ -9,7 +9,7 @@ const findById = async (id) => {
     return {
       error: {
         code: 'notFound',
-        message: 'Product not found',
+        message: 'Sale not found',
       },
     };
   }
