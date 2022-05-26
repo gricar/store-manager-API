@@ -3,7 +3,7 @@ const productsService = require('../services/productsService');
 const getAll = async (_req, res) => {
   const products = await productsService.getAll();
 
-  res.status(200).json(products);
+  return res.status(200).json(products);
 };
 
 const findById = async (req, res, next) => {
@@ -13,7 +13,7 @@ const findById = async (req, res, next) => {
 
   if (product.error) return next(product.error);
 
-  res.status(200).json(product);
+  return res.status(200).json(product);
 };
 
 module.exports = {
