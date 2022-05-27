@@ -14,7 +14,27 @@ const findById = async (id) => {
   return product[0];
 };
 
+const findByName = async (name) => {
+  const query = `
+  SELECT * FROM StoreManager.products
+  WHERE name = ?`;
+
+  const [product] = await connection.execute(query, [name]);
+
+  return product;
+};
+
+const create = async (name, quantity) => {
+  const query = 'INSERT INTO StoreManager.products (name, quantity) VALUES (?, ?);';
+
+  const [productAdded] = await connection.execute(query, [name, quantity]);
+
+  return ({ id: productAdded.insertId, name, quantity });
+};
+
 module.exports = {
   getAll,
   findById,
+  findByName,
+  create,
 };
