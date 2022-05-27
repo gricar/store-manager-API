@@ -1,4 +1,5 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 
 const app = express();
 
@@ -6,6 +7,8 @@ const app = express();
 app.get('/', (_request, response) => {
   response.send();
 });
+
+app.use(bodyParser.json());
 
 app.use('/products', require('./routers/productsRoute'));
 app.use('/sales', require('./routers/salesRoute'));
