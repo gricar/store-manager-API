@@ -4,8 +4,8 @@ const { expect } = require('chai');
 const connection = require('../../../models/connection');
 const productsModel = require('../../../models/productsModel');
 
-describe('a - Consulta todos os produtos do BD', () => {
-  describe('Situação 1-a: Não existem produtos cadastrados no BD', () => {
+describe('a_model - Consulta todos os produtos do BD', () => {
+  describe('Situação 1-a_model: Não existem produtos cadastrados no BD', () => {
     before(() => {
       const resolve = [[]];
 
@@ -21,7 +21,7 @@ describe('a - Consulta todos os produtos do BD', () => {
     });
   });
 
-  describe('Situação 2-a: Existem produtos cadastrados no BD', () => {
+  describe('Situação 2-a_model: Existem produtos cadastrados no BD', () => {
     before(() => {
       const resolve = [
         [
@@ -67,8 +67,8 @@ describe('a - Consulta todos os produtos do BD', () => {
 });
 
 //não está passando
-describe('b - Busca apenas um produto do BD por seu ID', () => {
-  describe('Situação 1-b: Não existe um produto com o ID informado', () => {
+describe('b_model - Busca apenas um produto do BD por seu ID', () => {
+  describe('Situação 1-b_model: Não existe um produto com o ID informado', () => {
     //before(() => sinon.stub(productsModel, 'findById').resolves(null));
     before(() => sinon.stub(connection, 'execute').resolves(null));
 
@@ -82,7 +82,7 @@ describe('b - Busca apenas um produto do BD por seu ID', () => {
     });
   });
 
-  describe('Situação 2-b: Existe um produto com o ID informado', () => {
+  describe('Situação 2-b_model: Existe um produto com o ID informado', () => {
     before(() => {
       const resolve = {
           id: 1,
