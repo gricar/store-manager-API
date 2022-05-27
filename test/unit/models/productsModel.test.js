@@ -65,3 +65,50 @@ describe('a - Consulta todos os produtos do BD', () => {
   });
 
 });
+
+//não está passando
+describe('b - Busca apenas um produto do BD por seu ID', () => {
+  describe('Situação 1-b: Não existe um produto com o ID informado', () => {
+    //before(() => sinon.stub(productsModel, 'findById').resolves(null));
+    before(() => sinon.stub(connection, 'execute').resolves(null));
+
+    after(() => connection.execute.restore());
+		//after(() => productsModel.findById.restore());
+
+    it('Retorna null', async () => {
+      const response = await productsModel.findById(5);
+      //console.log(response)
+      expect(response).to.be.null;
+    });
+  });
+
+  describe('Situação 2-b: Existe um produto com o ID informado', () => {
+    before(() => {
+      const resolve = {
+          id: 1,
+          name: 'Celular',
+          quantity: 3
+        };
+
+      sinon.stub(connection, 'execute').resolves(resolve);
+      //sinon.stub(productsModel, 'findById').resolves(resolve);
+    });
+
+    after(() => connection.execute.restore());
+		//after(() => productsModel.findById.restore());
+
+    it('Retorna um object que não está vazio', async () => {
+      const response = await productsModel.findById(1);
+      //console.log(response)
+
+      expect(response).to.be.an('object').that.is.not.empty;
+    });
+
+    it('Retorna as propriedades corretas', async () => {
+      const response = await productsModel.findById(1);
+
+      expect(response).to.have.all.keys('id', 'name', 'quantity');
+    });
+  });
+
+});
