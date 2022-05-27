@@ -59,7 +59,7 @@ describe('a_serv - Consulta todos os produtos do BD', () => {
   });
 
 });
-/*
+
 describe('b_serv - Busca apenas um produto do BD por seu ID', () => {
   describe('Situação 1-b: Não existe um produto com o ID informado', () => {
     before(() => {
@@ -71,22 +71,18 @@ describe('b_serv - Busca apenas um produto do BD por seu ID', () => {
       };
 
       sinon.stub(productsModel, 'findById').resolves(errorNotFound);
-    };
+    });
 
     after(() => productsModel.findById.restore());
 
-    it('Retorna um erro', async () => {
-      const response = await productsService.findById(5);
-      //console.log(response)
+    it('Retorna um objeto contendo o erro', async () => {
+      const response = await productsService.findById();
 
-      expect(response).to.be.an('object');
-      expect(response).to.have.a.property('error');
-      //expect(response).to.be.an('object').that.include.property('error');
-      //expect(response).to.be.an('object').that.include('error');
+      expect(response).to.be.an('object').that.include.property('error');
     });
 
     it('Retorna erro com código e mensagem de "notFound"', async () => {
-      const { code, message } = await productsService.findById(5);
+      const { error: { code, message }} = await productsService.findById(5);
 
       expect(code).to.equal('notFound');
       expect(message).to.equal('Product not found');
@@ -109,7 +105,6 @@ describe('b_serv - Busca apenas um produto do BD por seu ID', () => {
     it('Retorna um object que não está vazio', async () => {
       const productItem = await productsService.findById(1);
 
-      expect(productItem).to.have.lengthOf(1);
       expect(productItem).to.be.an('object').that.is.not.empty;
     });
 
@@ -117,9 +112,7 @@ describe('b_serv - Busca apenas um produto do BD por seu ID', () => {
       const productItem = await productsService.findById(1);
 
       expect(productItem).to.have.all.keys('id', 'name', 'quantity');
-      //expect(productItem).to.have.deep.members({ id: 1, name: 'Celular', quantity: 3 });
     });
   });
 
 });
-*/
