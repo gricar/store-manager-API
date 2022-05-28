@@ -43,7 +43,7 @@ const remove = async (req, res, next) => {
 
   await productsService.remove(id);
 
-  res.status(200).end();
+  res.status(204).end();
 };
 
 module.exports = {
