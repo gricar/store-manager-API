@@ -34,9 +34,12 @@ const create = async ({ name, quantity }) => {
 
 const update = async (id, { name, quantity }) => productsModel.update(id, name, quantity);
 
+const remove = async (id) => productsModel.remove(id);
+
 module.exports = {
   getAll,
   findById,
   create,
   update,
+  remove,
 };
