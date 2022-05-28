@@ -26,7 +26,25 @@ const findById = async (id) => {
   return sale;
 };
 
+const registerSaleDate = async () => {
+  const now = new Date().toISOString().replace('T', ' ').slice(0, 19);
+
+  const querySaleDate = 'INSERT INTO StoreManager.sales (date) VALUES (?);';
+  const [dateAdded] = await connection.execute(querySaleDate, [now]);
+  return dateAdded.insertId;
+};
+
+const create = async ({ productId, quantity }, saleId) => {
+  const query = `
+    INSERT INTO StoreManager.sales_products (sale_id, product_id, quantity)
+    VALUES (?, ?, ?);`;
+
+  return connection.execute(query, [saleId, productId, quantity]);
+};
+
 module.exports = {
   getAll,
   findById,
+  registerSaleDate,
+  create,
 };
