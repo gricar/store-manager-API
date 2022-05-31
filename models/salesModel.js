@@ -53,10 +53,18 @@ const update = async (id, quantity) => {
   return connection.execute(query, [quantity, id]);
 };
 
+const remove = async (id) => {
+	//como existe o DELETE CASCADE -> Permite deletar direto o id
+  //const teste = await connection.execute('DELETE FROM StoreManager.sales WHERE id = ?;', [id]);
+
+  return connection.execute('DELETE FROM StoreManager.sales_products WHERE sale_id = ?;', [id]);
+};
+
 module.exports = {
   getAll,
   findById,
   registerSaleDate,
   create,
   update,
+  remove,
 };

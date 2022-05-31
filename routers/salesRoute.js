@@ -10,5 +10,6 @@ salesRoute.get('/', salesController.getAll);
 salesRoute.get('/:id', salesController.findById);
 salesRoute.post('/', validateSales, rescue(salesController.create));
 salesRoute.put('/:id', validateSales, rescue(salesController.update));
+salesRoute.delete('/:id', rescue(salesController.remove));
 
 module.exports = salesRoute;
