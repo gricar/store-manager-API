@@ -159,3 +159,67 @@ describe('c_model - Busca apenas um produto do BD por seu "nome"', () => {
   });
 
 });
+
+describe('d_model - Adiciona um novo produto no BD', () => {
+  describe('Situação 1-d_model: É inserido com sucesso', () => {
+    const name = "Playstation";
+    const quantity = 7;
+
+    before(() => {
+      const resolve = [{ insertId: 1 }];
+
+      sinon.stub(connection, 'execute').resolves(resolve);
+    });
+
+    after(() => connection.execute.restore());
+
+    it('Retorna um object que não está vazio', async () => {
+      const response = await productsModel.create(name, quantity);
+
+      expect(response).to.be.an('object').that.is.not.empty;
+    });
+
+    it('Retorna as propriedades corretas', async () => {
+      const response = await productsModel.create(name, quantity);
+
+      expect(response).to.have.all.keys('id', 'name', 'quantity');
+    });
+  });
+
+});
+
+describe('e_model - Atualiza um produto no BD', () => {
+  describe('Situação 1-e_model: É atualizado com sucesso', () => {
+    const id = 1;
+    const name = 'Xbox';
+    const quantity = 32;
+
+    before(() => {
+      const resolve = [
+        {
+          id: 1,
+          name: "Xbox",
+          quantity: 32,
+        }
+      ];
+
+      sinon.stub(connection, 'execute').resolves(resolve);
+    });
+
+    after(() => connection.execute.restore());
+
+    it('Retorna um object que não está vazio', async () => {
+      const response = await productsModel.update(id, name, quantity);
+
+      expect(response).to.be.an('object').that.is.not.empty;
+    });
+
+    it('Retorna as propriedades corretas', async () => {
+      const response = await productsModel.update(id, name, quantity);
+
+      expect(response).to.have.all.keys('id', 'name', 'quantity');
+      //expect(response).to.have.a.property('id')
+    });
+  });
+
+});
