@@ -114,3 +114,48 @@ describe('b_model - Busca apenas um produto do BD por seu ID', () => {
   });
 
 });
+
+describe('c_model - Busca apenas um produto do BD por seu "nome"', () => {
+  describe('Situação 1-c: Não existe o produto com este "nome" cadastrado no BD', () => {
+    before(() => sinon.stub(connection, 'execute').resolves([[]]));
+
+    after(() => connection.execute.restore());
+
+    it('Retorna um array vazio', async () => {
+      const response = await productsModel.findByName('teste');
+
+      expect(response).to.be.an('array').that.is.empty;
+    });
+  });
+
+  describe('Situação 2-c: Existe o produto com este "nome" cadastrado no BD', () => {
+    before(() => {
+      const resolve = [
+        [
+          {
+            id: 1,
+            name: 'Celular',
+            quantity: 3
+          }
+        ]
+      ];
+
+      sinon.stub(connection, 'execute').resolves(resolve);
+    });
+
+    after(() => connection.execute.restore());
+
+    it('Retorna um object que não está vazio', async () => {
+      const [response] = await productsModel.findByName('Celular');
+
+      expect(response).to.be.an('object').that.is.not.empty;
+    });
+
+    it('Retorna as propriedades corretas', async () => {
+      const [response] = await productsModel.findByName('Celular');
+
+      expect(response).to.have.all.keys('id', 'name', 'quantity');
+    });
+  });
+
+});
