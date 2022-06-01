@@ -121,3 +121,43 @@ describe('b_salesServ - Busca apenas uma venda do BD por seu ID', () => {
   });
 
 });
+
+describe('c_salesServ - Atualiza uma venda no BD', () => {
+  describe('Situação 1-c_salesServ: É atualizada com sucesso', () => {
+    const id = 10;
+    const payload = [
+        {
+          productId: 1,
+          quantity: 69,
+        }
+      ];
+
+    before(() => {
+      const resolve =   {
+        saleId: 1,
+        itemUpdated: [
+          {
+            productId: 1,
+            quantity: 69
+          }
+        ]
+      };
+
+      sinon.stub(salesModel, 'update').resolves(resolve);
+    });
+
+    after(() => salesModel.update.restore());
+
+    it('Retorna um object que não está vazio', async () => {
+      const response = await salesService.update(id, payload);
+
+      expect(response).to.be.an('object').that.is.not.empty;
+    });
+
+    it('Retorna as propriedades corretas', async () => {
+      const response = await salesService.update(id, payload);
+
+      expect(response).to.have.all.keys('saleId', 'itemUpdated');
+    });
+  });
+});
