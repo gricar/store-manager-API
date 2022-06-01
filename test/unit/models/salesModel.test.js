@@ -149,3 +149,42 @@ describe('d_salesModel - Adiciona uma nova venda no BD', () => {
   });
 
 });
+
+describe('e_salesModel - Atualiza uma venda no BD', () => {
+  describe('Situação 1-e_salesModel: É atualizado com sucesso', () => {
+    const id = 1;
+    const quantity = 32;
+
+    before(() => {
+      const resolve = [
+        {
+          saleId: 1,
+          itemUpdated: [
+            {
+              productId: 1,
+              quantity: 32
+            }
+          ]
+        }
+      ];
+
+      sinon.stub(connection, 'execute').resolves(resolve);
+    });
+
+    after(() => connection.execute.restore());
+
+    it('Retorna um object que não está vazio', async () => {
+      const [response] = await salesModel.update(id, quantity);
+
+      expect(response).to.be.an('object').that.is.not.empty;
+    });
+
+    it('Retorna as propriedades corretas', async () => {
+      const [response] = await salesModel.update(id, quantity);
+
+      expect(response).to.have.all.keys('saleId', 'itemUpdated');
+    });
+  });
+
+});
+
