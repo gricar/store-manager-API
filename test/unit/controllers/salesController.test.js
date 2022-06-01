@@ -68,3 +68,88 @@ describe('a_salesCtrl - Consulta todas as vendas do BD', () => {
     });
   });
 });
+
+describe('b_salesCtrl - Busca apenas um produto do BD por seu ID', () => {
+  /*describe('Situação 1-b_salesCtrl: Não existe um produto com o ID informado', () => {
+    const response = {};
+    const request = {};
+
+    before(() => {
+      request.params = { id: 15 };
+
+      response.status = sinon.stub().returns(response);
+      response.json = sinon.stub().returns();
+
+      const saleNotFound = {
+        error: {
+          code: 404,
+          message: 'Sale not found'
+        }
+      };
+
+      sinon.stub(salesService, 'findById').resolves(saleNotFound);
+    });
+
+    after(() => salesService.findById.restore());
+
+    it.only('é chamado o método "status" passando 404', async () => {
+      await salesController.findById(request, response);
+
+      expect(response.status.calledWith(404)).to.be.equal(true);
+    });
+
+    it('é chamado o método "json" passando a mensagem "error"', async () => {
+      await salesController.findById(request, response);
+
+      expect(response.json.calledWith('error')).to.be.equal(true);
+    });
+
+    it('Retorna erro com código e mensagem de "notFound"', async () => {
+      const { message } = await salesController.findById(request, response);
+
+      expect(message).to.equal('Product not found');
+    });
+  });*/
+
+  describe('Situação 2-b_salesCtrl: Existe um produto com o ID informado', () => {
+    const response = {};
+    const request = {};
+
+    before(() => {
+      request.params = { id: 1 };
+
+      response.status = sinon.stub().returns(response);
+      response.json = sinon.stub().returns();
+
+      const resolve = [
+        {
+          productId: 1,
+          quantity: 2,
+          date: "2021-09-09T04:54:29.000Z",
+        },
+        {
+          productId: 2,
+          quantity: 10,
+          date: "2022-06-01T01:10:26.000Z",
+        }
+      ];
+
+      sinon.stub(salesService, 'findById').resolves(resolve);
+    });
+
+    after(() => salesService.findById.restore());
+
+    it('é chamado o método "status" passando 200', async () => {
+      await salesController.findById(request, response);
+
+      expect(response.status.calledWith(200)).to.be.equal(true);
+    });
+
+    it('é chamado o método "json" passando um objeto', async () => {
+      await salesController.findById(request, response);
+
+      expect(response.json.calledWith(sinon.match.array)).to.be.equal(true);
+    });
+  });
+
+});
