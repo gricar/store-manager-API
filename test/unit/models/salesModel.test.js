@@ -185,6 +185,20 @@ describe('e_salesModel - Atualiza uma venda no BD', () => {
       expect(response).to.have.all.keys('saleId', 'itemUpdated');
     });
   });
-
 });
 
+describe('f_salesModel - Remove uma venda no BD', () => {
+  describe('Situação 1-f_salesModel: É removido com sucesso', () => {
+    const id = 1;
+
+    before(() => sinon.stub(connection, 'execute').resolves([[]]));
+
+    after(() => connection.execute.restore());
+
+    it('Retorna um array que está vazio', async () => {
+      const [response] = await salesModel.remove(id);
+
+      expect(response).to.be.an('array').that.is.empty;
+    });
+  });
+});
