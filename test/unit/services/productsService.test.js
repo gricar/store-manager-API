@@ -116,3 +116,68 @@ describe('b_serv - Busca apenas um produto do BD por seu ID', () => {
   });
 
 });
+
+describe('c_serv - Adiciona um novo produto no BD', () => {
+  const payload = {
+    name: 'Playstation',
+    quantity: 69,
+  };
+
+  describe('Situação 1-c_serv: Já existe um produto com este nome no BD', () => {
+    before(() => {
+      const resolve = [
+        {
+          id: 1,
+          name: 'Playstation',
+          quantity: 69
+        }
+      ];
+
+      sinon.stub(productsModel, 'findByName').resolves(resolve);
+    });
+
+    after(() => productsModel.findByName.restore());
+
+    it('Retorna um erro', async () => {
+      const response = await productsService.create(payload);
+
+      expect(response).to.be.an('object').that.include.property('error');
+    });
+
+    it('Retorna erro com código e mensagem de "notFound"', async () => {
+      const { error: { code, message }} = await productsService.create(payload);
+
+      expect(code).to.equal('alreadyExists');
+      expect(message).to.equal('Product already exists');
+    });
+  });
+
+  describe('Situação 2-c_serv: É inserido com sucesso, não existia um produto com este nome', () => {
+    before(() => {
+      const resolve = {
+        id: 1,
+        name: 'Playstation',
+        quantity: 69
+      };
+
+      sinon.stub(productsModel, 'create').resolves(resolve);
+    });
+
+    after(() => productsModel.create.restore());
+
+    it('Retorna um object que não está vazio', async () => {
+      const productItem = await productsService.create(payload);
+
+      expect(productItem).to.be.an('object').that.is.not.empty;
+    });
+
+    it('Retorna as propriedades corretas', async () => {
+      const productItem = await productsService.create(payload);
+
+      expect(productItem).to.have.all.keys('id', 'name', 'quantity');
+    });
+  });
+
+});
+
+
