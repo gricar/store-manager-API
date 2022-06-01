@@ -3,6 +3,7 @@ const { expect } = require('chai');
 
 const productsService = require('../../../services/productsService');
 const productsController = require('../../../controllers/productsController');
+const next = require('../../../middlewares/error');
 
 describe('a_ctrl - Consulta todos os produtos do BD', () => {
   describe('Situação 1-a_ctrl: Não existem produtos cadastrados no BD', () => {
@@ -64,48 +65,46 @@ describe('a_ctrl - Consulta todos os produtos do BD', () => {
 
       expect(response.json.calledWith(sinon.match.array)).to.be.equal(true);
     });
-
   });
-
 });
 
-/*
 describe('b_ctrl - Busca apenas um produto do BD por seu ID', () => {
-  describe.only('Situação 1-b_ctrl: Não existe um produto com o ID informado', () => {
+  describe('Situação 1-b_ctrl: Não existe um produto com o ID informado', () => {
     const response = {};
     const request = {};
 
     before(() => {
-      request.params = { id: 1 };
+      request.params = { id: 15 };
 
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
 
-      const errorNotFound = {
+      const productNotFound = {
         error: {
-          code: 'notFound',
+          code: 404,
           message: 'Product not found'
         }
       };
 
-      sinon.stub(productsService, 'findById').resolves(errorNotFound);
+      //sinon.stub(productsService, 'findById').resolves(true);
+      sinon.stub(productsService, 'findById').resolves(productNotFound);
     });
 
     after(() => productsService.findById.restore());
 
     it('é chamado o método "status" passando 404', async () => {
-      await productsController.findById(request, response, next);
+      await productsController.findById(request, response);
 
       expect(response.status.calledWith(404)).to.be.equal(true);
     });
 
-    it.skip('é chamado o método "json" passando a mensagem "error"', async () => {
+    it('é chamado o método "json" passando a mensagem "error"', async () => {
       await productsController.findById(request, response);
 
       expect(response.json.calledWith('error')).to.be.equal(true);
     });
 
-    it.skip('Retorna erro com código e mensagem de "notFound"', async () => {
+    it('Retorna erro com código e mensagem de "notFound"', async () => {
       const { message } = await productsController.findById(request, response);
 
       expect(message).to.equal('Product not found');
@@ -147,4 +146,4 @@ describe('b_ctrl - Busca apenas um produto do BD por seu ID', () => {
   });
 
 });
-*/
+
