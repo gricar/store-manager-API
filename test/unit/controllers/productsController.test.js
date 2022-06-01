@@ -69,7 +69,7 @@ describe('a_ctrl - Consulta todos os produtos do BD', () => {
 });
 
 describe('b_ctrl - Busca apenas um produto do BD por seu ID', () => {
-  describe('Situação 1-b_ctrl: Não existe um produto com o ID informado', () => {
+  /*describe('Situação 1-b_ctrl: Não existe um produto com o ID informado', () => {
     const response = {};
     const request = {};
 
@@ -109,7 +109,7 @@ describe('b_ctrl - Busca apenas um produto do BD por seu ID', () => {
 
       expect(message).to.equal('Product not found');
     });
-  });
+  });*/
 
   describe('Situação 2-b_ctrl: Existe um produto com o ID informado', () => {
     const response = {};
@@ -148,47 +148,6 @@ describe('b_ctrl - Busca apenas um produto do BD por seu ID', () => {
 });
 
 describe('c_ctrl - Adiciona um novo produto no BD', () => {
-  describe.skip('Situação 1-c_ctrl: Já existe um produto com este nome no BD', () => {
-    const response = {};
-    const request = {};
-
-    before(() => {
-      request.params = { id: 15 };
-
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
-
-      const productNotFound = {
-        error: {
-          code: 404,
-          message: 'Product not found'
-        }
-      };
-
-      //sinon.stub(productsService, 'findById').resolves(true);
-      sinon.stub(productsService, 'findById').resolves(productNotFound);
-    });
-
-    after(() => productsService.findById.restore());
-
-    it('é chamado o método "status" passando 404', async () => {
-      await productsController.findById(request, response);
-
-      expect(response.status.calledWith(404)).to.be.equal(true);
-    });
-
-    it('é chamado o método "json" passando a mensagem "error"', async () => {
-      await productsController.findById(request, response);
-
-      expect(response.json.calledWith('error')).to.be.equal(true);
-    });
-
-    it('Retorna erro com código e mensagem de "notFound"', async () => {
-      const { message } = await productsController.findById(request, response);
-
-      expect(message).to.equal('Product not found');
-    });
-  });
 
   describe('Situação 2-b_ctrl: É inserido com sucesso, não existia um produto com este nome', () => {
     const response = {};
@@ -223,6 +182,48 @@ describe('c_ctrl - Adiciona um novo produto no BD', () => {
 
     it('é chamado o método "json" passando um objeto', async () => {
       await productsController.create(request, response);
+
+      expect(response.json.calledWith(sinon.match.object)).to.be.equal(true);
+    });
+  });
+
+});
+
+describe('d_ctrl - Atualiza um produto no BD', () => {
+
+  describe('Situação 1-d_ctrl: É atualizado com sucesso', () => {
+    const response = {};
+    const request = {};
+
+    before(() => {
+      request.params = { id: 1 };
+      request.body = {
+        name: 'Celular',
+        quantity: 3,
+      };
+
+      response.status = sinon.stub().returns(response);
+      response.json = sinon.stub().returns();
+
+      const resolve = [{
+          id: 1,
+          name: 'Celular',
+          quantity: 3
+        }];
+
+      sinon.stub(productsService, 'update').resolves(resolve);
+    });
+
+    after(() => productsService.update.restore());
+
+    it('é chamado o método "status" passando 200', async () => {
+      await productsController.update(request, response);
+
+      expect(response.status.calledWith(200)).to.be.equal(true);
+    });
+
+    it('é chamado o método "json" passando um objeto', async () => {
+      await productsController.update(request, response);
 
       expect(response.json.calledWith(sinon.match.object)).to.be.equal(true);
     });
