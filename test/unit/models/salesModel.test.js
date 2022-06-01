@@ -119,3 +119,33 @@ describe('b_salesModel - Busca apenas uma venda do BD por seu ID', () => {
   });
 
 });
+
+describe('d_salesModel - Adiciona uma nova venda no BD', () => {
+  describe('Situação 1-d_salesModel: É inserida com sucesso', () => {
+    const payload = {
+        productId: 1,
+        quantity: 50
+      };
+
+    before(() => {
+      const resolve = [{ insertId: 1 }];
+
+      sinon.stub(connection, 'execute').resolves(resolve);
+    });
+
+    after(() => connection.execute.restore());
+
+    it('Retorna um array que não está vazio', async () => {
+      const response = await salesModel.create(payload);
+
+      expect(response).to.be.an('array').that.is.not.empty;
+    });
+
+    it('Retorna as propriedades corretas', async () => {
+      const [response] = await salesModel.create(payload);
+
+      expect(response).to.have.property('insertId');
+    });
+  });
+
+});
