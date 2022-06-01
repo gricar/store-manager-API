@@ -161,3 +161,19 @@ describe('c_salesServ - Atualiza uma venda no BD', () => {
     });
   });
 });
+
+describe('d_salesServ - Remove uma venda no BD', () => {
+  describe('Situação 1-d_salesServ: É removido com sucesso', () => {
+    const id = 1;
+
+    before(() => sinon.stub(salesModel, 'remove').resolves([[]]));
+
+    after(() => salesModel.remove.restore());
+
+    it('Retorna um array que está vazio', async () => {
+      const [response] = await salesService.remove(id);
+
+      expect(response).to.be.an('array').that.is.empty;
+    });
+  });
+});
