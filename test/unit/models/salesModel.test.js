@@ -72,3 +72,50 @@ describe('a_salesModel - Consulta todas as vendas do BD', () => {
   });
 
 });
+
+describe('b_salesModel - Busca apenas uma venda do BD por seu ID', () => {
+  describe('Situação 1-b_salesModel: Não existe uma venda com o ID informado', () => {
+    before(() => {
+      const resolve = [[]];
+
+      sinon.stub(connection, 'execute').resolves(resolve);
+    });
+
+    after(() => connection.execute.restore());
+
+    it('Retorna null', async () => {
+      const response = await salesModel.findById();
+
+      expect(response).to.be.null;
+    });
+  });
+
+  describe('Situação 2-b_salesModel: Existe uma venda com o ID informado', () => {
+    before(() => {
+      const resolve = [
+        {
+          productId: 1,
+          quantity: 2,
+          date: "2021-09-09T04:54:29.000Z",
+        }
+      ];
+
+      sinon.stub(connection, 'execute').resolves(resolve);
+    });
+
+    after(() => connection.execute.restore());
+
+    it('Retorna um object que não está vazio', async () => {
+      const response = await salesModel.findById(1);
+
+      expect(response).to.be.an('object').that.is.not.empty;
+    });
+
+    it('Retorna as propriedades corretas', async () => {
+      const response = await salesModel.findById(1);
+
+      expect(response).to.have.all.keys('productId', 'quantity', 'date');
+    });
+  });
+
+});
