@@ -180,4 +180,36 @@ describe('c_serv - Adiciona um novo produto no BD', () => {
 
 });
 
+describe('d_serv - Atualiza um produto no BD', () => {
+  describe('Situação 1-d_serv: É atualizado com sucesso', () => {
+    const id = 10;
+    const payloadProduct = {
+          name: "Xbox",
+          quantity: 32,
+        };
 
+    before(() => {
+      const resolve = {
+        id: 10,
+        name: "Xbox",
+        quantity: 32,
+      };
+
+      sinon.stub(productsModel, 'update').resolves(resolve);
+    });
+
+    after(() => productsModel.update.restore());
+
+    it('Retorna um object que não está vazio', async () => {
+      const response = await productsService.update(id, payloadProduct);
+
+      expect(response).to.be.an('object').that.is.not.empty;
+    });
+
+    it('Retorna as propriedades corretas', async () => {
+      const response = await productsService.update(id, payloadProduct);
+
+      expect(response).to.have.all.keys('id', 'name', 'quantity');
+    });
+  });
+});
