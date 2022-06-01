@@ -66,3 +66,58 @@ describe('a_salesServ - Consulta todas as vendas do BD', () => {
   });
 
 });
+
+describe('b_salesServ - Busca apenas uma venda do BD por seu ID', () => {
+  describe('Situação 1-b_salesServ: Não existe uma venda com o ID informado', () => {
+    before(() => sinon.stub(salesModel, 'findById').resolves(undefined));
+
+    after(() => salesModel.findById.restore());
+
+    it('Retorna um objeto contendo o erro', async () => {
+      const response = await salesService.findById();
+
+      expect(response).to.be.an('object').that.include.property('error');
+    });
+
+    it('Retorna erro com código e mensagem de "notFound"', async () => {
+      const { error: { code, message }} = await salesService.findById(5);
+
+      expect(code).to.equal('notFound');
+      expect(message).to.equal('Sale not found');
+    });
+  });
+
+  describe('Situação 2-b_salesServ: Existe vendas com o ID informado', () => {
+    before(() => {
+      const resolve = [
+        {
+          productId: 1,
+          quantity: 2,
+          date: "2021-09-09T04:54:29.000Z",
+        },
+        {
+          productId: 2,
+          quantity: 10,
+          date: "2022-06-01T01:10:26.000Z",
+        }
+      ];
+
+      sinon.stub(salesModel, 'findById').resolves(resolve);
+    });
+
+    after(() => salesModel.findById.restore());
+
+    it('Retorna um array que não está vazio', async () => {
+      const productItem = await salesService.findById(1);
+
+      expect(productItem).to.be.an('array').that.is.not.empty;
+    });
+
+    it('Retorna as propriedades corretas', async () => {
+      const productItem = await salesService.findById(1);
+
+      expect(productItem[1]).to.have.all.keys('productId', 'quantity', 'date');
+    });
+  });
+
+});
