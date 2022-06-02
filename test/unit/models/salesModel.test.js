@@ -6,13 +6,13 @@ const salesModel = require('../../../models/salesModel');
 
 describe('a_salesModel - Consulta todas as vendas do BD', () => {
   describe('Situação 1-a_salesModel: Não existem vendas cadastradas no BD', () => {
-    before(() => {
+    beforeEach(() => {
       const resolve = [[]];
 
       sinon.stub(connection, 'execute').resolves(resolve);
     });
 
-    after(() => connection.execute.restore());
+    afterEach(() => connection.execute.restore());
 
     it('Retorna um array vazio', async () => {
       const response = await salesModel.getAll();
@@ -22,7 +22,7 @@ describe('a_salesModel - Consulta todas as vendas do BD', () => {
   });
 
   describe('Situação 2-a_salesModel: Existem vendas cadastradas no BD', () => {
-    before(() => {
+    beforeEach(() => {
       const resolve = [
         [
           {
@@ -43,7 +43,7 @@ describe('a_salesModel - Consulta todas as vendas do BD', () => {
       sinon.stub(connection, 'execute').resolves(resolve);
     });
 
-    after(() => connection.execute.restore());
+    afterEach(() => connection.execute.restore());
 
     it('Retorna um array que não está vazio', async () => {
       const response = await salesModel.getAll();
@@ -75,13 +75,13 @@ describe('a_salesModel - Consulta todas as vendas do BD', () => {
 
 describe('b_salesModel - Busca apenas uma venda do BD por seu ID', () => {
   describe('Situação 1-b_salesModel: Não existe uma venda com o ID informado', () => {
-    before(() => {
+    beforeEach(() => {
       const resolve = [[]];
 
       sinon.stub(connection, 'execute').resolves(resolve);
     });
 
-    after(() => connection.execute.restore());
+    afterEach(() => connection.execute.restore());
 
     it('Retorna null', async () => {
       const response = await salesModel.findById();
@@ -91,7 +91,7 @@ describe('b_salesModel - Busca apenas uma venda do BD por seu ID', () => {
   });
 
   describe('Situação 2-b_salesModel: Existe uma venda com o ID informado', () => {
-    before(() => {
+    beforeEach(() => {
       const resolve = [
         {
           productId: 1,
@@ -103,7 +103,7 @@ describe('b_salesModel - Busca apenas uma venda do BD por seu ID', () => {
       sinon.stub(connection, 'execute').resolves(resolve);
     });
 
-    after(() => connection.execute.restore());
+    afterEach(() => connection.execute.restore());
 
     it('Retorna um object que não está vazio', async () => {
       const response = await salesModel.findById(1);
@@ -127,13 +127,13 @@ describe('d_salesModel - Adiciona uma nova venda no BD', () => {
         quantity: 50
       };
 
-    before(() => {
+    beforeEach(() => {
       const resolve = [{ insertId: 1 }];
 
       sinon.stub(connection, 'execute').resolves(resolve);
     });
 
-    after(() => connection.execute.restore());
+    afterEach(() => connection.execute.restore());
 
     it('Retorna um array que não está vazio', async () => {
       const response = await salesModel.create(payload);
@@ -155,7 +155,7 @@ describe('e_salesModel - Atualiza uma venda no BD', () => {
     const id = 1;
     const quantity = 32;
 
-    before(() => {
+    beforeEach(() => {
       const resolve = [
         {
           saleId: 1,
@@ -171,7 +171,7 @@ describe('e_salesModel - Atualiza uma venda no BD', () => {
       sinon.stub(connection, 'execute').resolves(resolve);
     });
 
-    after(() => connection.execute.restore());
+    afterEach(() => connection.execute.restore());
 
     it('Retorna um object que não está vazio', async () => {
       const [response] = await salesModel.update(id, quantity);
@@ -191,9 +191,9 @@ describe('f_salesModel - Remove uma venda no BD', () => {
   describe('Situação 1-f_salesModel: É removido com sucesso', () => {
     const id = 1;
 
-    before(() => sinon.stub(connection, 'execute').resolves([[]]));
+    beforeEach(() => sinon.stub(connection, 'execute').resolves([[]]));
 
-    after(() => connection.execute.restore());
+    afterEach(() => connection.execute.restore());
 
     it('Retorna um array que está vazio', async () => {
       const [response] = await salesModel.remove(id);

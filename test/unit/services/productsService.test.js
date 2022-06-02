@@ -4,11 +4,11 @@ const { expect } = require('chai');
 const productsModel = require('../../../models/productsModel');
 const productsService = require('../../../services/productsService');
 
-describe('a_serv - Consulta todos os produtos do BD', () => {
-  describe('Situação 1-a_serv: Não existem produtos cadastrados no BD', () => {
-    before(() => sinon.stub(productsModel, 'getAll').resolves([]));
+describe('a_productsServ - Consulta todos os produtos do BD', () => {
+  describe('Situação 1-a_productsServ: Não existem produtos cadastrados no BD', () => {
+    beforeEach(() => sinon.stub(productsModel, 'getAll').resolves([]));
 
-    after(() => productsModel.getAll.restore());
+    afterEach(() => productsModel.getAll.restore());
 
     it('Retorna um array vazio', async () => {
       const response = await productsService.getAll();
@@ -17,8 +17,8 @@ describe('a_serv - Consulta todos os produtos do BD', () => {
     });
   });
 
-  describe('Situação 2-a_serv: Existem produtos cadastrados no BD', () => {
-    before(() => {
+  describe('Situação 2-a_productsServ: Existem produtos cadastrados no BD', () => {
+    beforeEach(() => {
       const resolve = [
         {
           id: 1,
@@ -35,7 +35,7 @@ describe('a_serv - Consulta todos os produtos do BD', () => {
       sinon.stub(productsModel, 'getAll').resolves(resolve);
     });
 
-    after(() => productsModel.getAll.restore());
+    afterEach(() => productsModel.getAll.restore());
 
     it('Retorna um array que não está vazio', async () => {
       const response = await productsService.getAll();
@@ -60,11 +60,11 @@ describe('a_serv - Consulta todos os produtos do BD', () => {
 
 });
 
-describe('b_serv - Busca apenas um produto do BD por seu ID', () => {
-  describe('Situação 1-b: Não existe um produto com o ID informado', () => {
-    before(() => sinon.stub(productsModel, 'findById').resolves(false));
+describe('b_productsServ - Busca apenas um produto do BD por seu ID', () => {
+  describe('Situação 1-b_productsServ: Não existe um produto com o ID informado', () => {
+    beforeEach(() => sinon.stub(productsModel, 'findById').resolves(false));
 
-    after(() => productsModel.findById.restore());
+    afterEach(() => productsModel.findById.restore());
 
     it('Retorna um objeto contendo o erro', async () => {
       const response = await productsService.findById();
@@ -80,8 +80,8 @@ describe('b_serv - Busca apenas um produto do BD por seu ID', () => {
     });
   });
 
-  describe('Situação 2-b: Existe um produto com o ID informado', () => {
-    before(() => {
+  describe('Situação 2-b_productsServ: Existe um produto com o ID informado', () => {
+    beforeEach(() => {
       const resolve = {
           id: 1,
           name: 'Celular',
@@ -91,7 +91,7 @@ describe('b_serv - Busca apenas um produto do BD por seu ID', () => {
       sinon.stub(productsModel, 'findById').resolves(resolve);
     });
 
-    after(() => productsModel.findById.restore());
+    afterEach(() => productsModel.findById.restore());
 
     it('Retorna um object que não está vazio', async () => {
       const productItem = await productsService.findById(1);
@@ -108,14 +108,14 @@ describe('b_serv - Busca apenas um produto do BD por seu ID', () => {
 
 });
 
-describe('c_serv - Adiciona um novo produto no BD', () => {
+/*describe('c_productsServ - Adiciona um novo produto no BD', () => {
   const payload = {
     name: 'Playstation',
     quantity: 69,
   };
 
-  describe('Situação 1-c_serv: Já existe um produto com este nome no BD', () => {
-    before(() => {
+  describe('Situação 1-c_productsServ: Já existe um produto com este nome no BD', () => {
+    beforeEach(() => {
       const resolve = [
         {
           id: 1,
@@ -127,7 +127,7 @@ describe('c_serv - Adiciona um novo produto no BD', () => {
       sinon.stub(productsModel, 'findByName').resolves(resolve);
     });
 
-    after(() => productsModel.findByName.restore());
+    afterEach(() => productsModel.findByName.restore());
 
     it('Retorna um erro', async () => {
       const response = await productsService.create(payload);
@@ -143,8 +143,8 @@ describe('c_serv - Adiciona um novo produto no BD', () => {
     });
   });
 
-  describe('Situação 2-c_serv: É inserido com sucesso, não existia um produto com este nome', () => {
-    before(() => {
+  describe('Situação 2-c_productsServ: É inserido com sucesso, não existia um produto com este nome', () => {
+    beforeEach(() => {
       const resolve = {
         id: 1,
         name: 'Playstation',
@@ -154,7 +154,7 @@ describe('c_serv - Adiciona um novo produto no BD', () => {
       sinon.stub(productsModel, 'create').resolves(resolve);
     });
 
-    after(() => productsModel.create.restore());
+    afterEach(() => productsModel.create.restore());
 
     it('Retorna um object que não está vazio', async () => {
       const productItem = await productsService.create(payload);
@@ -169,17 +169,17 @@ describe('c_serv - Adiciona um novo produto no BD', () => {
     });
   });
 
-});
+});*/
 
-describe('d_serv - Atualiza um produto no BD', () => {
-  describe('Situação 1-d_serv: É atualizado com sucesso', () => {
+describe('d_productsServ - Atualiza um produto no BD', () => {
+  describe('Situação 1-d_productsServ: É atualizado com sucesso', () => {
     const id = 10;
     const payloadProduct = {
           name: "Xbox",
           quantity: 32,
         };
 
-    before(() => {
+    beforeEach(() => {
       const resolve = {
         id: 10,
         name: "Xbox",
@@ -189,7 +189,7 @@ describe('d_serv - Atualiza um produto no BD', () => {
       sinon.stub(productsModel, 'update').resolves(resolve);
     });
 
-    after(() => productsModel.update.restore());
+    afterEach(() => productsModel.update.restore());
 
     it('Retorna um object que não está vazio', async () => {
       const response = await productsService.update(id, payloadProduct);

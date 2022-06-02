@@ -6,9 +6,9 @@ const salesService = require('../../../services/salesService');
 
 describe('a_salesServ - Consulta todas as vendas do BD', () => {
   describe('Situação 1-a_salesServ: Não existem vendas cadastradas no BD', () => {
-    before(() => sinon.stub(salesModel, 'getAll').resolves([]));
+    beforeEach(() => sinon.stub(salesModel, 'getAll').resolves([]));
 
-    after(() => salesModel.getAll.restore());
+    afterEach(() => salesModel.getAll.restore());
 
     it('Retorna um array vazio', async () => {
       const response = await salesService.getAll();
@@ -18,7 +18,7 @@ describe('a_salesServ - Consulta todas as vendas do BD', () => {
   });
 
   describe('Situação 2-a_salesServ: Existem vendas cadastradas no BD', () => {
-    before(() => {
+    beforeEach(() => {
       const resolve = [
         {
           saleId: 1,
@@ -37,7 +37,7 @@ describe('a_salesServ - Consulta todas as vendas do BD', () => {
       sinon.stub(salesModel, 'getAll').resolves(resolve);
     });
 
-    after(() => salesModel.getAll.restore());
+    afterEach(() => salesModel.getAll.restore());
 
     it('Retorna um array que não está vazio', async () => {
       const response = await salesService.getAll();
@@ -69,9 +69,9 @@ describe('a_salesServ - Consulta todas as vendas do BD', () => {
 
 describe('b_salesServ - Busca apenas uma venda do BD por seu ID', () => {
   describe('Situação 1-b_salesServ: Não existe uma venda com o ID informado', () => {
-    before(() => sinon.stub(salesModel, 'findById').resolves(null));
+    beforeEach(() => sinon.stub(salesModel, 'findById').resolves(null));
 
-    after(() => salesModel.findById.restore());
+    afterEach(() => salesModel.findById.restore());
 
     it('Retorna um objeto contendo o erro', async () => {
       const response = await salesService.findById();
@@ -88,7 +88,7 @@ describe('b_salesServ - Busca apenas uma venda do BD por seu ID', () => {
   });
 
   describe('Situação 2-b_salesServ: Existe vendas com o ID informado', () => {
-    before(() => {
+    beforeEach(() => {
       const resolve = [
         {
           productId: 1,
@@ -105,7 +105,7 @@ describe('b_salesServ - Busca apenas uma venda do BD por seu ID', () => {
       sinon.stub(salesModel, 'findById').resolves(resolve);
     });
 
-    after(() => salesModel.findById.restore());
+    afterEach(() => salesModel.findById.restore());
 
     it('Retorna um array que não está vazio', async () => {
       const productItem = await salesService.findById(1);
@@ -132,7 +132,7 @@ describe('c_salesServ - Atualiza uma venda no BD', () => {
         }
       ];
 
-    before(() => {
+    beforeEach(() => {
       const resolve =   {
         saleId: 1,
         itemUpdated: [
@@ -146,7 +146,7 @@ describe('c_salesServ - Atualiza uma venda no BD', () => {
       sinon.stub(salesModel, 'update').resolves(resolve);
     });
 
-    after(() => salesModel.update.restore());
+    afterEach(() => salesModel.update.restore());
 
     it('Retorna um object que não está vazio', async () => {
       const response = await salesService.update(id, payload);
@@ -166,9 +166,9 @@ describe('d_salesServ - Remove uma venda no BD', () => {
   describe('Situação 1-d_salesServ: É removido com sucesso', () => {
     const id = 1;
 
-    before(() => sinon.stub(salesModel, 'remove').resolves([[]]));
+    beforeEach(() => sinon.stub(salesModel, 'remove').resolves([[]]));
 
-    after(() => salesModel.remove.restore());
+    afterEach(() => salesModel.remove.restore());
 
     it('Retorna um array que está vazio', async () => {
       const [response] = await salesService.remove(id);

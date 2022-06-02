@@ -3,13 +3,12 @@ const { expect } = require('chai');
 
 const productsService = require('../../../services/productsService');
 const productsController = require('../../../controllers/productsController');
-const next = require('../../../middlewares/error');
 
-describe('a_ctrl - Consulta todos os produtos do BD', () => {
-  describe('Situação 1-a_ctrl: Não existem produtos cadastrados no BD', () => {
+describe('a_productsCrtl - Consulta todos os produtos do BD', () => {
+  describe('Situação 1-a_productsCrtl: Não existem produtos cadastrados no BD', () => {
     const response = {};
     const request = {};
-    before(() => {
+    beforeEach(() => {
       request.body = {};
 
       response.status = sinon.stub().returns(response);
@@ -18,7 +17,7 @@ describe('a_ctrl - Consulta todos os produtos do BD', () => {
       sinon.stub(productsService, 'getAll').resolves([]);
     });
 
-    after(() => productsService.getAll.restore());
+    afterEach(() => productsService.getAll.restore());
 
     it('é chamado o status com o código 200', async () => {
       await productsController.getAll(request, response);
@@ -28,11 +27,11 @@ describe('a_ctrl - Consulta todos os produtos do BD', () => {
 
   });
 
-  describe('Situação 2-a_ctrl: Existem produtos cadastrados no BD', () => {
+  describe('Situação 2-a_productsCrtl: Existem produtos cadastrados no BD', () => {
     const response = {};
     const request = {};
 
-    before(() => {
+    beforeEach(() => {
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
 
@@ -52,7 +51,7 @@ describe('a_ctrl - Consulta todos os produtos do BD', () => {
       sinon.stub(productsService, 'getAll').resolves(resolve);
     });
 
-    after(() => productsService.getAll.restore());
+    afterEach(() => productsService.getAll.restore());
 
     it('Retorna um código 200', async () => {
       await productsController.getAll(request, response);
@@ -68,8 +67,8 @@ describe('a_ctrl - Consulta todos os produtos do BD', () => {
   });
 });
 
-describe('b_ctrl - Busca apenas um produto do BD por seu ID', () => {
-  /*describe('Situação 1-b_ctrl: Não existe um produto com o ID informado', () => {
+describe('b_productsCrtl - Busca apenas um produto do BD por seu ID', () => {
+  /*describe('Situação 1-b_productsCrtl: Não existe um produto com o ID informado', () => {
     const response = {};
     const request = {};
 
@@ -111,11 +110,11 @@ describe('b_ctrl - Busca apenas um produto do BD por seu ID', () => {
     });
   });*/
 
-  describe('Situação 2-b_ctrl: Existe um produto com o ID informado', () => {
+  describe('Situação 2-b_productsCrtl: Existe um produto com o ID informado', () => {
     const response = {};
     const request = {};
 
-    before(() => {
+    beforeEach(() => {
       request.params = { id: 1 };
 
       response.status = sinon.stub().returns(response);
@@ -130,7 +129,7 @@ describe('b_ctrl - Busca apenas um produto do BD por seu ID', () => {
       sinon.stub(productsService, 'findById').resolves(resolve);
     });
 
-    after(() => productsService.findById.restore());
+    afterEach(() => productsService.findById.restore());
 
     it('é chamado o método "status" passando 200', async () => {
       await productsController.findById(request, response);
@@ -147,13 +146,13 @@ describe('b_ctrl - Busca apenas um produto do BD por seu ID', () => {
 
 });
 
-describe('c_ctrl - Adiciona um novo produto no BD', () => {
+describe('c_productsCrtl - Adiciona um novo produto no BD', () => {
 
-  describe('Situação 2-b_ctrl: É inserido com sucesso, não existia um produto com este nome', () => {
+  describe('Situação 2-c_productsCrtl: É inserido com sucesso, não existia um produto com este nome', () => {
     const response = {};
     const request = {};
 
-    before(() => {
+    beforeEach(() => {
       request.params = { id: 1 };
       request.body = {
         name: 'Celular',
@@ -172,7 +171,7 @@ describe('c_ctrl - Adiciona um novo produto no BD', () => {
       sinon.stub(productsService, 'create').resolves(resolve);
     });
 
-    after(() => productsService.create.restore());
+    afterEach(() => productsService.create.restore());
 
     it('é chamado o método "status" passando 201', async () => {
       await productsController.create(request, response);
@@ -189,32 +188,36 @@ describe('c_ctrl - Adiciona um novo produto no BD', () => {
 
 });
 
-describe('d_ctrl - Atualiza um produto no BD', () => {
+describe('d_productsCrtl - Atualiza um produto no BD', () => {
 
-  describe('Situação 1-d_ctrl: É atualizado com sucesso', () => {
+  describe('Situação 1-d_productsCrtl: É atualizado com sucesso', () => {
     const response = {};
     const request = {};
 
-    before(() => {
+    beforeEach(() => {
       request.params = { id: 1 };
       request.body = {
         name: 'Celular',
         quantity: 3,
       };
 
+      const resolve = {
+        id: 1,
+        name: 'Celular',
+        quantity: 3
+      };
+
       response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
+      response.json = sinon.stub().returns(resolve);
 
-      const resolve = [{
-          id: 1,
-          name: 'Celular',
-          quantity: 3
-        }];
-
-      sinon.stub(productsService, 'update').resolves(resolve);
+      sinon.stub(productsService, 'findById').resolves([]);
+      sinon.stub(productsService, 'update').resolves([resolve]);
     });
 
-    after(() => productsService.update.restore());
+    afterEach(() => {
+      productsService.findById.restore();
+      productsService.update.restore();
+    });
 
     it('é chamado o método "status" passando 200', async () => {
       await productsController.update(request, response);

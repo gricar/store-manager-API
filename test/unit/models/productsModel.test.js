@@ -4,15 +4,15 @@ const { expect } = require('chai');
 const connection = require('../../../models/connection');
 const productsModel = require('../../../models/productsModel');
 
-describe('a_model - Consulta todos os produtos do BD', () => {
-  describe('Situação 1-a_model: Não existem produtos cadastrados no BD', () => {
-    before(() => {
+describe('a_productsModel - Consulta todos os produtos do BD', () => {
+  describe('Situação 1-a_productsModel: Não existem produtos cadastrados no BD', () => {
+    beforeEach(() => {
       const resolve = [[]];
 
       sinon.stub(connection, 'execute').resolves(resolve);
     });
 
-    after(() => connection.execute.restore());
+    afterEach(() => connection.execute.restore());
 
     it('Retorna um array vazio', async () => {
       const response = await productsModel.getAll();
@@ -21,8 +21,8 @@ describe('a_model - Consulta todos os produtos do BD', () => {
     });
   });
 
-  describe('Situação 2-a_model: Existem produtos cadastrados no BD', () => {
-    before(() => {
+  describe('Situação 2-a_productsModel: Existem produtos cadastrados no BD', () => {
+    beforeEach(() => {
       const resolve = [
         [
           {
@@ -41,7 +41,7 @@ describe('a_model - Consulta todos os produtos do BD', () => {
       sinon.stub(connection, 'execute').resolves(resolve);
     });
 
-    after(() => connection.execute.restore());
+    afterEach(() => connection.execute.restore());
 
     it('Retorna um array que não está vazio', async () => {
       const response = await productsModel.getAll();
@@ -66,15 +66,15 @@ describe('a_model - Consulta todos os produtos do BD', () => {
 
 });
 
-describe('b_model - Busca apenas um produto do BD por seu ID', () => {
-  describe('Situação 1-b_model: Não existe um produto com o ID informado', () => {
-    before(() => {
+describe('b_productsModel - Busca apenas um produto do BD por seu ID', () => {
+  describe('Situação 1-b_productsModel: Não existe um produto com o ID informado', () => {
+    beforeEach(() => {
       const resolve = [[]];
 
       sinon.stub(connection, 'execute').resolves(resolve);
     });
 
-    after(() => connection.execute.restore());
+    afterEach(() => connection.execute.restore());
 
     it('Retorna null', async () => {
       const response = await productsModel.findById();
@@ -83,8 +83,8 @@ describe('b_model - Busca apenas um produto do BD por seu ID', () => {
     });
   });
 
-  describe('Situação 2-b_model: Existe um produto com o ID informado', () => {
-    before(() => {
+  describe('Situação 2-b_productsModel: Existe um produto com o ID informado', () => {
+    beforeEach(() => {
       const resolve = [
         [
           {
@@ -98,7 +98,7 @@ describe('b_model - Busca apenas um produto do BD por seu ID', () => {
       sinon.stub(connection, 'execute').resolves(resolve);
     });
 
-    after(() => connection.execute.restore());
+    afterEach(() => connection.execute.restore());
 
     it('Retorna um object que não está vazio', async () => {
       const response = await productsModel.findById(1);
@@ -115,11 +115,11 @@ describe('b_model - Busca apenas um produto do BD por seu ID', () => {
 
 });
 
-describe('c_model - Busca apenas um produto do BD por seu "nome"', () => {
-  describe('Situação 1-c: Não existe o produto com este "nome" cadastrado no BD', () => {
-    before(() => sinon.stub(connection, 'execute').resolves([[]]));
+describe('c_productsModel - Busca apenas um produto do BD por seu "nome"', () => {
+  describe('Situação 1-c_productsModel: Não existe o produto com este "nome" cadastrado no BD', () => {
+    beforeEach(() => sinon.stub(connection, 'execute').resolves([[]]));
 
-    after(() => connection.execute.restore());
+    afterEach(() => connection.execute.restore());
 
     it('Retorna um array vazio', async () => {
       const response = await productsModel.findByName('teste');
@@ -128,8 +128,8 @@ describe('c_model - Busca apenas um produto do BD por seu "nome"', () => {
     });
   });
 
-  describe('Situação 2-c: Existe o produto com este "nome" cadastrado no BD', () => {
-    before(() => {
+  describe('Situação 2-c_productsModel: Existe o produto com este "nome" cadastrado no BD', () => {
+    beforeEach(() => {
       const resolve = [
         [
           {
@@ -143,7 +143,7 @@ describe('c_model - Busca apenas um produto do BD por seu "nome"', () => {
       sinon.stub(connection, 'execute').resolves(resolve);
     });
 
-    after(() => connection.execute.restore());
+    afterEach(() => connection.execute.restore());
 
     it('Retorna um object que não está vazio', async () => {
       const [response] = await productsModel.findByName('Celular');
@@ -160,18 +160,18 @@ describe('c_model - Busca apenas um produto do BD por seu "nome"', () => {
 
 });
 
-describe('d_model - Adiciona um novo produto no BD', () => {
-  describe('Situação 1-d_model: É inserido com sucesso', () => {
+describe('d_productsModel - Adiciona um novo produto no BD', () => {
+  describe('Situação 1-d_productsModel: É inserido com sucesso', () => {
     const name = "Playstation";
     const quantity = 7;
 
-    before(() => {
+    beforeEach(() => {
       const resolve = [{ insertId: 1 }];
 
       sinon.stub(connection, 'execute').resolves(resolve);
     });
 
-    after(() => connection.execute.restore());
+    afterEach(() => connection.execute.restore());
 
     it('Retorna um object que não está vazio', async () => {
       const response = await productsModel.create(name, quantity);
@@ -188,13 +188,13 @@ describe('d_model - Adiciona um novo produto no BD', () => {
 
 });
 
-describe('e_model - Atualiza um produto no BD', () => {
-  describe('Situação 1-e_model: É atualizado com sucesso', () => {
+describe('e_productsModel - Atualiza um produto no BD', () => {
+  describe('Situação 1-e_productsModel: É atualizado com sucesso', () => {
     const id = 1;
     const name = 'Xbox';
     const quantity = 32;
 
-    before(() => {
+    beforeEach(() => {
       const resolve = [
         {
           id: 1,
@@ -206,7 +206,7 @@ describe('e_model - Atualiza um produto no BD', () => {
       sinon.stub(connection, 'execute').resolves(resolve);
     });
 
-    after(() => connection.execute.restore());
+    afterEach(() => connection.execute.restore());
 
     it('Retorna um object que não está vazio', async () => {
       const response = await productsModel.update(id, name, quantity);

@@ -8,7 +8,7 @@ describe('a_salesCtrl - Consulta todas as vendas do BD', () => {
   describe('Situação 1-a_salesCtrl: Não existem vendas cadastradas no BD', () => {
     const response = {};
     const request = {};
-    before(() => {
+    beforeEach(() => {
       request.body = {};
 
       response.status = sinon.stub().returns(response);
@@ -17,7 +17,7 @@ describe('a_salesCtrl - Consulta todas as vendas do BD', () => {
       sinon.stub(salesService, 'getAll').resolves([]);
     });
 
-    after(() => salesService.getAll.restore());
+    afterEach(() => salesService.getAll.restore());
 
     it('é chamado o status com o código 200', async () => {
       await salesController.getAll(request, response);
@@ -31,7 +31,7 @@ describe('a_salesCtrl - Consulta todas as vendas do BD', () => {
     const response = {};
     const request = {};
 
-    before(() => {
+    beforeEach(() => {
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
 
@@ -53,7 +53,7 @@ describe('a_salesCtrl - Consulta todas as vendas do BD', () => {
       sinon.stub(salesService, 'getAll').resolves(resolve);
     });
 
-    after(() => salesService.getAll.restore());
+    afterEach(() => salesService.getAll.restore());
 
     it('Retorna um código 200', async () => {
       await salesController.getAll(request, response);
@@ -74,7 +74,7 @@ describe('b_salesCtrl - Busca apenas um produto do BD por seu ID', () => {
     const response = {};
     const request = {};
 
-    before(() => {
+    beforeEach(() => {
       request.params = { id: 15 };
 
       response.status = sinon.stub().returns(response);
@@ -91,7 +91,7 @@ describe('b_salesCtrl - Busca apenas um produto do BD por seu ID', () => {
       sinon.stub(salesService, 'findById').resolves(saleNotFound);
     });
 
-    after(() => salesService.findById.restore());
+    afterEach(() => salesService.findById.restore());
 
     it.only('é chamado o método "status" passando 404', async () => {
       await salesController.findById(request, response, next);
@@ -118,7 +118,7 @@ describe('b_salesCtrl - Busca apenas um produto do BD por seu ID', () => {
     const response = {};
     const request = {};
 
-    before(() => {
+    beforeEach(() => {
       request.params = { id: 1 };
 
       response.status = sinon.stub().returns(response);
@@ -140,7 +140,7 @@ describe('b_salesCtrl - Busca apenas um produto do BD por seu ID', () => {
       sinon.stub(salesService, 'findById').resolves(resolve);
     });
 
-    after(() => salesService.findById.restore());
+    afterEach(() => salesService.findById.restore());
 
     it('é chamado o método "status" passando 200', async () => {
       await salesController.findById(request, response);
