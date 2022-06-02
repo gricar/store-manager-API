@@ -70,7 +70,7 @@ describe('a_salesCtrl - Consulta todas as vendas do BD', () => {
 });
 
 describe('b_salesCtrl - Busca apenas um produto do BD por seu ID', () => {
-  /*describe('Situação 1-b_salesCtrl: Não existe um produto com o ID informado', () => {
+  /*describe.only('Situação 1-b_salesCtrl: Não existe um produto com o ID informado', () => {
     const response = {};
     const request = {};
 
@@ -79,6 +79,7 @@ describe('b_salesCtrl - Busca apenas um produto do BD por seu ID', () => {
 
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
+      next = sinon.stub().returns();
 
       const saleNotFound = {
         error: {
@@ -87,25 +88,26 @@ describe('b_salesCtrl - Busca apenas um produto do BD por seu ID', () => {
         }
       };
 
-      sinon.stub(salesService, 'findById').resolves(saleNotFound);
+      sinon.stub(salesService, 'findById').resolves([]);
     });
 
     after(() => salesService.findById.restore());
 
     it.only('é chamado o método "status" passando 404', async () => {
-      await salesController.findById(request, response);
+      await salesController.findById(request, response, next);
 
-      expect(response.status.calledWith(404)).to.be.equal(true);
+      expect(next.calledWith(404)).to.be.equal(true);
+      //expect(response.status.calledWith(404)).to.be.equal(true);
     });
 
     it('é chamado o método "json" passando a mensagem "error"', async () => {
-      await salesController.findById(request, response);
+      await salesController.findById(request, response, next);
 
       expect(response.json.calledWith('error')).to.be.equal(true);
     });
 
     it('Retorna erro com código e mensagem de "notFound"', async () => {
-      const { message } = await salesController.findById(request, response);
+      const { message } = await salesController.findById(request, response, next);
 
       expect(message).to.equal('Product not found');
     });
