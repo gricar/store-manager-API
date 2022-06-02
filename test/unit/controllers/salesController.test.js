@@ -88,13 +88,14 @@ describe('b_salesCtrl - Busca apenas um produto do BD por seu ID', () => {
         }
       };
 
-      sinon.stub(salesService, 'findById').resolves([]);
+      sinon.stub(salesService, 'findById').resolves(saleNotFound);
     });
 
     after(() => salesService.findById.restore());
 
     it.only('é chamado o método "status" passando 404', async () => {
       await salesController.findById(request, response, next);
+      console.log(typeof next)
 
       expect(next.calledWith(404)).to.be.equal(true);
       //expect(response.status.calledWith(404)).to.be.equal(true);

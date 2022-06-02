@@ -69,7 +69,7 @@ describe('a_salesServ - Consulta todas as vendas do BD', () => {
 
 describe('b_salesServ - Busca apenas uma venda do BD por seu ID', () => {
   describe('Situação 1-b_salesServ: Não existe uma venda com o ID informado', () => {
-    before(() => sinon.stub(salesModel, 'findById').resolves(undefined));
+    before(() => sinon.stub(salesModel, 'findById').resolves(null));
 
     after(() => salesModel.findById.restore());
 

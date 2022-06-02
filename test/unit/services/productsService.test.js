@@ -62,16 +62,7 @@ describe('a_serv - Consulta todos os produtos do BD', () => {
 
 describe('b_serv - Busca apenas um produto do BD por seu ID', () => {
   describe('Situação 1-b: Não existe um produto com o ID informado', () => {
-    before(() => {
-      const errorNotFound = {
-        error: {
-          code: 'notFound',
-          message: 'Product not found'
-        }
-      };
-
-      sinon.stub(productsModel, 'findById').resolves(errorNotFound);
-    });
+    before(() => sinon.stub(productsModel, 'findById').resolves(false));
 
     after(() => productsModel.findById.restore());
 
