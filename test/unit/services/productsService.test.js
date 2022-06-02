@@ -108,7 +108,7 @@ describe('b_productsServ - Busca apenas um produto do BD por seu ID', () => {
 
 });
 
-/*describe('c_productsServ - Adiciona um novo produto no BD', () => {
+describe('c_productsServ - Adiciona um novo produto no BD', () => {
   const payload = {
     name: 'Playstation',
     quantity: 69,
@@ -135,7 +135,7 @@ describe('b_productsServ - Busca apenas um produto do BD por seu ID', () => {
       expect(response).to.be.an('object').that.include.property('error');
     });
 
-    it('Retorna erro com código e mensagem de "notFound"', async () => {
+    it('Retorna erro com código e mensagem de "already exists"', async () => {
       const { error: { code, message }} = await productsService.create(payload);
 
       expect(code).to.equal('alreadyExists');
@@ -151,10 +151,14 @@ describe('b_productsServ - Busca apenas um produto do BD por seu ID', () => {
         quantity: 69
       };
 
+      sinon.stub(productsModel, 'findByName').resolves([]);
       sinon.stub(productsModel, 'create').resolves(resolve);
     });
 
-    afterEach(() => productsModel.create.restore());
+    afterEach(() => {
+      productsModel.findByName.restore();
+      productsModel.create.restore();
+    });
 
     it('Retorna um object que não está vazio', async () => {
       const productItem = await productsService.create(payload);
@@ -169,7 +173,7 @@ describe('b_productsServ - Busca apenas um produto do BD por seu ID', () => {
     });
   });
 
-});*/
+});
 
 describe('d_productsServ - Atualiza um produto no BD', () => {
   describe('Situação 1-d_productsServ: É atualizado com sucesso', () => {
