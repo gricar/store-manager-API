@@ -9,6 +9,7 @@ module.exports = (err, req, res, _next) => {
   const statusByErrorCode = {
     notFound: 404,
     alreadyExists: 409,
+    unprocessableEntity: 422,
   };
 
   const status = statusByErrorCode[err.code] || 500;
