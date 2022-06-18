@@ -14,7 +14,7 @@ services:
     # Substitui o comando padrão da imagem do node
     command: bash
     # Restarta a imagem caso algo a faça parar
-    restart: always
+    # restart: always
     # Diretório padrão de execução
     working_dir: /app
     # Lista de volumes (diretórios) mapeados de fora para dentro do container
@@ -42,7 +42,7 @@ services:
   db:
     container_name: store_manager_db
     image: mysql:5.7
-    restart: always
+    # restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 'password'
     ports:
